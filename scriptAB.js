@@ -1209,7 +1209,9 @@ function trackPurchaseCompleted() {
 
     const transactionId = generateTransactionId();
 
-
+    // Check if auto drink exists in cart
+    const AUTO_DRINK_ID = "auto-drink-free";
+    const hasAutoDrink = cart.some((item) => item.id === AUTO_DRINK_ID);
 
     // Prüfe ob gtag verfügbar ist
     if (typeof gtag === 'function') {
@@ -1223,7 +1225,8 @@ function trackPurchaseCompleted() {
         is_co2_neutral: cartState.isCO2Neutral,
         has_subscription: cartState.hasSubscription,
         total_value: totals.total,
-        currency: 'EUR'
+        currency: 'EUR',
+        has_auto_drink: hasAutoDrink,
       });
 
 
