@@ -1,4 +1,3 @@
-// Menüdaten
 const categories = [
   { id: "appetizers", name: "Vorspeisen", icon: "fa-plate-wheat" },
   { id: "doner", name: "Döner", icon: "fa-utensils" },
@@ -12,7 +11,6 @@ const categories = [
 ];
 
 const menuItems = [
-  // Appetizers
   {
     id: "appetizer-1",
     name: "Klassische Pommes",
@@ -54,7 +52,6 @@ const menuItems = [
     image: "https://images.unsplash.com/photo-1548340748-6d2b7d7da280?w=400&h=300&fit=crop",
     category: "appetizers",
   },
-  // Döner
   {
     id: "doner-1",
     name: "Döner Kebab",
@@ -89,7 +86,6 @@ const menuItems = [
     category: "doner",
   },
 
-  // Burger
   {
     id: "burger-1",
     name: "Cheeseburger",
@@ -123,7 +119,6 @@ const menuItems = [
     image: "https://images.unsplash.com/photo-1606755962773-d324e0a13086?w=400&h=300&fit=crop",
     category: "burger",
   },
-  // Pizza
   {
     id: "pizza-1",
     name: "Margherita",
@@ -157,7 +152,6 @@ const menuItems = [
     image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&h=300&fit=crop",
     category: "pizza",
   },
-  // Schnitzel
   {
     id: "schnitzel-1",
     name: "Wiener Schnitzel",
@@ -182,7 +176,6 @@ const menuItems = [
     image: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimg.grouponcdn.com%2Fdeal%2F2dQc8QihTDj3LJdP45C9uDyjMVCU%2F2d-1404x842%2Fv1%2Fc870x524.jpg&f=1&nofb=1&ipt=46b4568d00b9fcaa0859a010860c99f87a56c9ec6d8508a78e4319140767f8cc",
     category: "schnitzel",
   },
-  // Vegetarian
   {
     id: "veg-1",
     name: "Falafel Wrap",
@@ -224,7 +217,6 @@ const menuItems = [
     image: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.leckerschmecker.me%2Fwp-content%2Fuploads%2Fsites%2F6%2F2024%2F03%2Fspinat-boerek-mit-feta.jpeg&f=1&nofb=1&ipt=dcc22a25baa07e8487f7348cfa20bb3c98b1702ff6a6cc0c18bc6f556af9445e",
     category: "vegetarian",
   },
-  // Soups
   {
     id: "soup-1",
     name: "Linsensuppe",
@@ -249,7 +241,6 @@ const menuItems = [
     image: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Feat.de%2Fwp-content%2Fuploads%2F2023%2F05%2Ftomatensuppe-mit-passierten-tomaten-014-2.jpg&f=1&nofb=1&ipt=850950563697951c262c1836ba27ecf4c5af5a3b19967ac2e04fa67df830ae05",
     category: "soups",
   },
-  // Desserts
   {
     id: "dessert-1",
     name: "Baklava",
@@ -291,7 +282,6 @@ const menuItems = [
     image: "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Freisehappen.de%2Fwp-content%2Fuploads%2F2021%2F06%2FSuetlac-6.jpg&f=1&nofb=1&ipt=77b9300aa37511eee3b2930f0fa76be104e6f91a3e8dacdee33c2e934f99d31d",
     category: "desserts",
   },
-  // Drinks
   {
     id: "drink-1",
     name: "Fanta",
@@ -390,18 +380,14 @@ const menuItems = [
   },
 ];
 
-// State Management
 let cart = [];
 let activeCategory = null;
 let searchQuery = "";
-// Toggle variable to show/hide price breakdown details
-const SHOW_PRICE_BREAKDOWN = false; // Set to true to show subtotal, extras, delivery; false to show only total
+const SHOW_PRICE_BREAKDOWN = false;
 
-// Toggle variable to increase total by 5%
-const INCREASE_TOTAL_BY_5_PERCENT = true; // Set to true to increase total by 5%
+const INCREASE_TOTAL_BY_5_PERCENT = true;
 
-// Toggle variable to show/hide trash icon and style minus button
-const SHOW_TRASH_ICON = false; // Set to true to show trash icon and white minus; false to hide trash and blend minus
+const SHOW_TRASH_ICON = false;
 
 let cartState = {
   selectedTipPercent: 0.10,
@@ -409,10 +395,9 @@ let cartState = {
   isCO2Neutral: true,
   hasSubscription: true,
   showOrderSummary: false,
-  autoDrinkWasAdded: false, // Track if auto drink was already added once
+  autoDrinkWasAdded: false,
 };
 
-// Cart Management
 function addToCart(item) {
   const existingItem = cart.find((i) => i.id === item.id);
   if (existingItem) {
@@ -443,7 +428,7 @@ function updateQuantity(itemId, quantity) {
 function clearCart() {
   cart = [];
   cartState.showOrderSummary = false;
-  cartState.autoDrinkWasAdded = false; // Reset when cart is cleared
+  cartState.autoDrinkWasAdded = false;
   updateCartUI();
 }
 
@@ -455,7 +440,7 @@ function getTotalPrice() {
   return cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 }
 
-const MINIMUM_ORDER_VALUE = 15; // Minimum order value in euros
+const MINIMUM_ORDER_VALUE = 15;
 
 function getCartTotals() {
   const subtotal = getTotalPrice();
@@ -476,15 +461,12 @@ function checkAndAddAutoDrink() {
   const MINIMUM_VALUE_FOR_AUTO_DRINK = 15;
   const subtotal = getTotalPrice();
 
-  // Find existing auto drink
   const autoDrinkExists = cart.find((i) => i.id === AUTO_DRINK_ID);
 
-  // Find a drink to use (use first drink from menu)
   const drinkItem = menuItems.find((item) => item.category === "drinks");
 
-  if (!drinkItem) return; // No drinks available
+  if (!drinkItem) return;
 
-  // Only add auto drink once when threshold is reached, and only if it was never added before
   if (subtotal >= MINIMUM_VALUE_FOR_AUTO_DRINK && !autoDrinkExists && !cartState.autoDrinkWasAdded) {
     const autoDrink = {
       ...drinkItem,
@@ -495,7 +477,7 @@ function checkAndAddAutoDrink() {
       isAutoAdded: true
     };
     cart.push({ ...autoDrink, quantity: 1 });
-    cartState.autoDrinkWasAdded = true; // Mark as added, so it won't be added again
+    cartState.autoDrinkWasAdded = true;
   }
 }
 
@@ -514,7 +496,6 @@ function updateCartUI() {
   renderCart();
 }
 
-// Render Menu
 function renderCategories() {
   const container = document.querySelector(".category-scroll");
   if (!container) return;
@@ -559,7 +540,6 @@ function renderMenu() {
   const emptyState = document.getElementById("emptyState");
   if (!menuGrid) return;
 
-  // Filter items
   let filteredItems = menuItems;
 
   if (searchQuery.trim()) {
@@ -574,7 +554,6 @@ function renderMenu() {
     filteredItems = filteredItems.filter((item) => item.category === activeCategory);
   }
 
-  // Show/hide search results
   if (searchQuery.trim()) {
     if (searchResults) {
       searchResults.style.display = "block";
@@ -587,11 +566,8 @@ function renderMenu() {
     if (searchResults) searchResults.style.display = "none";
   }
 
-  // Clear menu
   menuGrid.innerHTML = "";
 
-
-  // Show empty state
   if (filteredItems.length === 0) {
     if (emptyState) emptyState.style.display = "block";
     return;
@@ -599,9 +575,7 @@ function renderMenu() {
 
   if (emptyState) emptyState.style.display = "none";
 
-  // Group by category if not searching and no active category
   if (!searchQuery.trim() && !activeCategory) {
-    // Add class to indicate grouped mode
     menuGrid.classList.add("menu-grid-grouped");
 
     const groupedItems = {};
@@ -636,7 +610,6 @@ function renderMenu() {
       menuGrid.appendChild(categoryDiv);
     });
   } else {
-    // Flat grid for specific category or search results
     menuGrid.classList.remove("menu-grid-grouped");
 
     filteredItems.forEach((item, index) => {
@@ -688,7 +661,6 @@ function createMenuCard(item, index) {
   return card;
 }
 
-// Cart Sidebar
 function openCart() {
   const sidebar = document.getElementById("cartSidebar");
   const overlay = document.getElementById("cartOverlay");
@@ -713,7 +685,6 @@ function renderCart() {
   const sidebar = document.getElementById("cartSidebar");
   if (!sidebar) return;
 
-  // Preserve accordion state
   const extrasAccordion = document.getElementById("extrasAccordion");
   const isAccordionOpen = extrasAccordion && extrasAccordion.classList.contains("open");
 
@@ -985,10 +956,8 @@ function renderCart() {
       `;
   }
 
-  // Attach event listeners
   attachCartListeners();
 
-  // Restore accordion state if it was open
   if (isAccordionOpen) {
     const restoredAccordion = document.getElementById("extrasAccordion");
     if (restoredAccordion) {
@@ -998,13 +967,11 @@ function renderCart() {
 }
 
 function attachCartListeners() {
-  // Close cart
   const closeBtns = document.querySelectorAll("#closeCart");
   closeBtns.forEach(btn => {
     btn.addEventListener("click", closeCart);
   });
 
-  // Quantity controls
   document.querySelectorAll("[data-action]").forEach(btn => {
     btn.addEventListener("click", (e) => {
       const action = e.currentTarget.dataset.action;
@@ -1020,7 +987,6 @@ function attachCartListeners() {
     });
   });
 
-  // Remove item
   document.querySelectorAll(".cart-item-remove").forEach(btn => {
     btn.addEventListener("click", (e) => {
       const itemId = e.currentTarget.dataset.id;
@@ -1028,7 +994,6 @@ function attachCartListeners() {
     });
   });
 
-  // Extras accordion
   const extrasHeader = document.getElementById("extrasHeader");
   const extrasAccordion = document.getElementById("extrasAccordion");
   if (extrasHeader && extrasAccordion) {
@@ -1037,7 +1002,6 @@ function attachCartListeners() {
     });
   }
 
-  // Tip buttons
   document.querySelectorAll(".tip-btn").forEach(btn => {
     btn.addEventListener("click", () => {
       const tipPercent = parseFloat(btn.dataset.tip);
@@ -1046,7 +1010,6 @@ function attachCartListeners() {
     });
   });
 
-  // Insurance checkboxes (mutually exclusive)
   const insuranceYesCheckbox = document.getElementById("insuranceYes");
   const insuranceNoCheckbox = document.getElementById("insuranceNo");
 
@@ -1057,7 +1020,6 @@ function attachCartListeners() {
         if (insuranceNoCheckbox) insuranceNoCheckbox.checked = false;
         renderCart();
       } else {
-        // If unchecking "Yes", automatically check "No"
         cartState.hasInsurance = false;
         if (insuranceNoCheckbox) {
           insuranceNoCheckbox.checked = true;
@@ -1074,7 +1036,6 @@ function attachCartListeners() {
         if (insuranceYesCheckbox) insuranceYesCheckbox.checked = false;
         renderCart();
       } else {
-        // If unchecking "No", automatically check "Yes"
         cartState.hasInsurance = true;
         if (insuranceYesCheckbox) {
           insuranceYesCheckbox.checked = true;
@@ -1084,7 +1045,6 @@ function attachCartListeners() {
     });
   }
 
-  // CO2 checkboxes (mutually exclusive)
   const co2YesCheckbox = document.getElementById("co2Yes");
   const co2NoCheckbox = document.getElementById("co2No");
 
@@ -1095,7 +1055,6 @@ function attachCartListeners() {
         if (co2NoCheckbox) co2NoCheckbox.checked = false;
         renderCart();
       } else {
-        // If unchecking "Yes", automatically check "No"
         cartState.isCO2Neutral = false;
         if (co2NoCheckbox) {
           co2NoCheckbox.checked = true;
@@ -1112,7 +1071,6 @@ function attachCartListeners() {
         if (co2YesCheckbox) co2YesCheckbox.checked = false;
         renderCart();
       } else {
-        // If unchecking "No", automatically check "Yes"
         cartState.isCO2Neutral = true;
         if (co2YesCheckbox) {
           co2YesCheckbox.checked = true;
@@ -1122,7 +1080,6 @@ function attachCartListeners() {
     });
   }
 
-  // Proceed to checkout
   const proceedBtn = document.getElementById("proceedCheckout");
   if (proceedBtn) {
     proceedBtn.addEventListener("click", () => {
@@ -1134,7 +1091,6 @@ function attachCartListeners() {
     });
   }
 
-  // Back to cart
   const backBtn = document.getElementById("backToCart");
   if (backBtn) {
     backBtn.addEventListener("click", () => {
@@ -1143,7 +1099,6 @@ function attachCartListeners() {
     });
   }
 
-  // Subscription checkbox
   const subscriptionCheckbox = document.getElementById("orderSubscription");
   if (subscriptionCheckbox) {
     subscriptionCheckbox.addEventListener("change", (e) => {
@@ -1151,15 +1106,12 @@ function attachCartListeners() {
     });
   }
 
-  // Confirm order
   const confirmBtn = document.getElementById("confirmOrder");
   if (confirmBtn) {
     confirmBtn.addEventListener("click", () => {
       const totals = getCartTotals();
       if (totals.total >= MINIMUM_ORDER_VALUE) {
-        // ===== GA4 TRACKING =====
         trackPurchaseCompleted();
-        // ========================
 
         clearCart();
         closeCart();
@@ -1169,65 +1121,42 @@ function attachCartListeners() {
   }
 }
 
-// ===================================================================
-// GA4 Tracking Functions
-// ===================================================================
-
-/**
- * Generiere eine eindeutige Transaktions-ID
- */
 function generateTransactionId() {
   const timestamp = Date.now();
   const random = Math.random().toString(36).substr(2, 9);
   return `T-${timestamp}-${random}`;
 }
 
-/**
- * Hole URL-Parameter (z.B. uid)
- */
 function getUrlParameter(name) {
   const urlParams = new URLSearchParams(window.location.search);
   return urlParams.get(name) || null;
 }
 
-/**
- * Zähle Bestseller im Warenkorb
- */
 function countBestsellers() {
   return cart.filter(item => item.isBestseller).length;
 }
 
-/**
- * Hauptfunktion: Tracking-Event an GA4 senden
- */
-/**
- * Erstelle eine kommaseparierte Liste aller Item-Namen im Warenkorb
- * Beispiel: "Döner Box, Hähnchenschnitzel, Fanta"
- */
 function getCartItemsList() {
   return cart.map(item => item.name).join(', ');
 }
 
 function trackPurchaseCompleted() {
   try {
-    // Sammle alle Daten aus dem aktuellen Cart-Status
     const totals = getCartTotals();
-    const itemList = getCartItemsList(); // Liste aller Items im Warenkorb
-    const tipPercentage = Math.round(cartState.selectedTipPercent * 100); // In Prozent (z.B. 10 für 10%)
-    const uid = getUrlParameter('uid'); // Hole uid aus URL
-    const proid = getUrlParameter('proid'); // Hole proid aus URL
-    const sessionid = getUrlParameter('sessionid'); // Hole sessionid aus URL
-    const studyid = getUrlParameter('studyid'); // Hole studyid aus URL
+    const itemList = getCartItemsList();
+    const tipPercentage = Math.round(cartState.selectedTipPercent * 100);
+    const uid = getUrlParameter('uid');
+    const proid = getUrlParameter('proid');
+    const sessionid = getUrlParameter('sessionid');
+    const studyid = getUrlParameter('studyid');
 
     const transactionId = generateTransactionId();
 
-    // Check if auto drink exists in cart
     const AUTO_DRINK_ID = "auto-drink-free";
     const hasAutoDrink = cart.some((item) => item.id === AUTO_DRINK_ID);
 
-    // Prüfe ob gtag verfügbar ist
     if (typeof gtag === 'function') {
-      // Sende Event direkt an GA4 mit gtag
+
       gtag('event', 'purchase_completed', {
         transaction_id: transactionId,
         proid_token: proid,
@@ -1244,7 +1173,6 @@ function trackPurchaseCompleted() {
         item_list: itemList
       });
 
-
     } else {
       console.error('gtag ist nicht verfügbar! Stellen Sie sicher, dass Google Analytics korrekt geladen wurde.');
     }
@@ -1254,11 +1182,9 @@ function trackPurchaseCompleted() {
   }
 }
 
-// Order Confirmation Modal
 function showOrderConfirmation(orderTotal) {
   const modal = document.getElementById("orderModal");
   if (modal) {
-    // Set the order total value
     const orderValueElement = modal.querySelector("#orderValue");
     if (orderValueElement && orderTotal) {
       orderValueElement.textContent = orderTotal.toFixed(2);
@@ -1277,7 +1203,6 @@ function hideOrderConfirmation() {
   }
 }
 
-// Search Functionality
 function handleSearch(query) {
   searchQuery = query;
   const clearBtns = document.querySelectorAll("#clearSearch, #clearMobileSearch");
@@ -1285,7 +1210,6 @@ function handleSearch(query) {
     btn.style.display = query ? "block" : "none";
   });
 
-  // If searching, reset category
   if (query.trim()) {
     activeCategory = null;
     updateCategoryButtons();
@@ -1294,7 +1218,6 @@ function handleSearch(query) {
   renderMenu();
 }
 
-// Mobile Search Toggle
 function toggleMobileSearch() {
   const mobileSearch = document.getElementById("mobileSearch");
   const searchToggle = document.getElementById("searchToggle");
@@ -1314,10 +1237,8 @@ function toggleMobileSearch() {
   }
 }
 
-// Initialize
 document.addEventListener("DOMContentLoaded", () => {
 
-  // Categories
   document.querySelectorAll(".category-btn[data-category='all']").forEach(btn => {
     btn.addEventListener("click", () => {
       activeCategory = null;
@@ -1329,7 +1250,6 @@ document.addEventListener("DOMContentLoaded", () => {
   renderCategories();
   updateCategoryButtons();
 
-  // Search
   const searchInput = document.getElementById("searchInput");
   const mobileSearchInput = document.getElementById("mobileSearchInput");
 
@@ -1337,7 +1257,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (input) {
       input.addEventListener("input", (e) => {
         handleSearch(e.target.value);
-        // Sync search inputs
         if (input === searchInput && mobileSearchInput) {
           mobileSearchInput.value = e.target.value;
         } else if (input === mobileSearchInput && searchInput) {
@@ -1366,9 +1285,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Mobile search toggle - removed (button no longer exists)
-
-  // Cart
   const cartToggle = document.getElementById("cartToggle");
   if (cartToggle) {
     cartToggle.addEventListener("click", openCart);
@@ -1379,20 +1295,16 @@ document.addEventListener("DOMContentLoaded", () => {
     cartOverlay.addEventListener("click", closeCart);
   }
 
-  // Order modal - Copy button
   const copyOrderValueBtn = document.getElementById("copyOrderValue");
   if (copyOrderValueBtn) {
     copyOrderValueBtn.addEventListener("click", () => {
-      // Copy order value to clipboard
       const orderValueElement = document.getElementById("orderValue");
       if (orderValueElement) {
         const orderValue = orderValueElement.textContent;
         navigator.clipboard.writeText(orderValue).then(() => {
-          // Update button text to show success
           copyOrderValueBtn.textContent = "Kopiert!";
           copyOrderValueBtn.style.backgroundColor = "#22c55e";
 
-          // Show toast notification
           const toast = document.createElement("div");
           toast.textContent = `${orderValue}€ in Zwischenablage kopiert`;
           toast.style.cssText = `
@@ -1412,12 +1324,10 @@ document.addEventListener("DOMContentLoaded", () => {
           `;
           document.body.appendChild(toast);
 
-          // Remove toast after 4 seconds
           setTimeout(() => {
             toast.style.animation = "slideDown 0.3s ease-in";
             setTimeout(() => toast.remove(), 300);
           }, 4000);
-
 
         }).catch(err => {
           console.error('Failed to copy:', err);
@@ -1437,11 +1347,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Initial render
   renderMenu();
   updateCartUI();
 
-  // Terms and Conditions Popup
   const termsPopup = document.getElementById("termsPopup");
   const termsLink = document.getElementById("termsLink");
   const closeTermsPopup = document.getElementById("closeTermsPopup");
@@ -1463,7 +1371,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Privacy Policy Popup
   const privacyPopup = document.getElementById("privacyPopup");
   const privacyLink = document.getElementById("privacyLink");
   const closePrivacyPopup = document.getElementById("closePrivacyPopup");
@@ -1485,7 +1392,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Imprint Popup
   const imprintPopup = document.getElementById("imprintPopup");
   const imprintLink = document.getElementById("imprintLink");
   const closeImprintPopup = document.getElementById("closeImprintPopup");
